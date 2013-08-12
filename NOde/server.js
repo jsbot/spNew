@@ -1,5 +1,5 @@
 var http = require("http"),
-io = require('socket.io');
+io = require("socket.io");
 var JSON2 = require('./');
 
 function start() {
@@ -64,17 +64,16 @@ messageConfig = {
 	"0002":"getRepro"
 }
 	
-	function getData(client,collection){
+	function getData(client,reqCollection){
 		new Db('den_test', new Server("127.0.0.1", 27017, {auto_reconnect: false}), {})
 			.open(function(err, db) {
 				if(!err) {
 					console.log("We are connected");
 				}
-				db.collection(collection, function(err, collection) {
-					collection.find().toArray(function(err, dbRes) {
-						 var intCount = docs.length;
+				db.collection(reqCollection, function(err, dbCollection) {
+					dbCollection.find().toArray(function(err, dbRes) {
+						 var intCount = dbRes.length;
 						 sendMessage(client, dbRes);
-						 //dbRes = docs;
 						//for (i=0; i<intCount; i++){
 						//console.log("item:");
 						//console.log(docs[i]);
