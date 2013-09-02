@@ -3,7 +3,7 @@ define([
     'underscore',
     'backbone',
     // Pull in the Model module from above
-    'models/pageModel'
+    'cage/appSP/models/pageModel'
 ], function(_, Backbone, PageModel){
     var PageCollection = Backbone.Collection.extend({
         model: PageModel

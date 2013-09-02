@@ -3,26 +3,28 @@ define([
     'jquery',
     'underscore',
     'backbone',
-    'collections/pageCollection',
+    'cage/appSP/collections/pageCollection',
     // Using the Require.js text! plugin, we are loaded raw text
     // which will be used as our views primary template
-    'text!templates/friends/friendsPage.html',
-    'handlebars'
-], function($, _, Backbone, PageCollection, pageTemplate, Handlebars){
+    'text!cage/appSP/templates/page/page.html',
+    'handlebars',
+    'service/connector'
+], function($, _, Backbone, PageCollection, pageTemplate, Handlebars, connector){
 
 
     pageView = Backbone.View.extend({
         el: $('#container'),
         template: Handlebars.compile(pageTemplate),
         events: {
-            "click .wasup": "navigateToPage" // Обработчик клика на кнопке "Проверить"
+            "click .test": "navigateToFriends" // Обработчик клика на кнопке "Проверить"
         },
-        navigateToPage: function(){
-            //alert("check");
-            appRouterInstance.navigate("page",true);
+        navigateToFriends: function(){
+            alert("navigate to friends");
+            appRouterInstance.navigate("friends",true);
         },
-        render: function(){
 
+        render: function(){
+		    alert("dsfsd1");
             // Using Underscore we can compile our template with data
 
             var context = this.collection.models;
@@ -31,7 +33,8 @@ define([
 
         },
         initialize: function(){
-
+            var conn = connector;
+		    alert("dsfsd");
             this.testModel = {title: 'Title', text: 'Text'};
             this.collection = new PageCollection();
 

@@ -3,8 +3,8 @@ define([
     'jquery',
     'underscore',
     'backbone',
-    'cage/views/page/pageView',
-    'cage/views/friends/friendsView'
+    'cage/appSP/views/page/pageView',
+    'cage/appSP/views/friends/friendsView'
 ], function($, _, Backbone, PageView, FriendsView){
 
     var AppRouter = Backbone.Router.extend({

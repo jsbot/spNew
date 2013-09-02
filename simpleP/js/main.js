@@ -4,6 +4,9 @@
 // There usage will become more apparent further along in the tutorial.
 require.config({
     shim: {
+        'socketio': {
+            exports: 'io'
+        },
         underscore: {
             exports: '_'
         },
@@ -20,7 +23,8 @@ require.config({
         jquery: 'lib/ext/jquery',
         underscore: 'lib/ext/underscore',
         backbone: 'lib/ext/backbone',
-        handlebars:'lib/ext/handlebars'
+        handlebars:'lib/ext/handlebars',
+        socketio:'lib/ext/socket.io'
     }
 
 });
