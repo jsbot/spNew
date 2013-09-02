@@ -22,10 +22,16 @@ define([
             alert("navigate to friends");
             appRouterInstance.navigate("friends",true);
         },
+        addRepro: function (collection,reproArr){
+
+            for(i=0; i<=reproArr.length; i++){
+                collection.add(reproArr[i]);
+            }
+
+        },
 
         render: function(){
-		    alert("dsfsd1");
-            // Using Underscore we can compile our template with data
+		    // Using Underscore we can compile our template with data
 
             var context = this.collection.models;
             var html    = this.template({numbers: context});
@@ -33,23 +39,37 @@ define([
 
         },
         initialize: function(){
+            var _this = this;
             var conn = connector;
-		    alert("dsfsd");
-            this.testModel = {title: 'Title', text: 'Text'};
-            this.collection = new PageCollection();
+            conn.on('wellcome', function (data) {
+                console.log(data);     alert('dsfdf');
+            });
+            conn.on('news', function (data) {
+                console.log(data);
+                _this.collection = new PageCollection();
+                _this.addRepro(_this.collection,data);
+            });
 
-            this.collection.add({
+
+            conn.emit('message', '{"id":"0001","collection":"friends"}');
+            console.log("send Friends reqiest");
+
+            this.testModel = {title: 'Title', text: 'Text'};
+
+
+
+            /*this.collection.add({
                 id: 1,
                 title: "html mockup2",
-                img: "/img/1.jpg",
+                img: "img/1.jpg",
                 src: "/test.html"
-            });
-            this.collection.add({
+            });*/
+            /*this.collection.add({
                 id: 2,
                 title: "html mockup3",
-                img: "/img/2.jpg",
+                img: "img/2.jpg",
                 src: "asdasdasdas/test.html"
-            });
+            });*/
         }
 
     });

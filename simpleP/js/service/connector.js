@@ -4,11 +4,7 @@ define([
     'socketio'
 ], function($, io){
 
-    var conf = require('config/serverConfig');
-    console.log(conf);
+    var socket = io.connect('http://127.0.0.1:8880');
 
-    socket = io.connect('http://localhost:8888');
-    socket.on('wellcome', function (data) {
-        console.log(data);
-    });
+    return socket;
 });
