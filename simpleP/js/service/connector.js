@@ -24,5 +24,6 @@ define([
 		//subscribe for event
 	}
 
+
 	return socket;
 });
