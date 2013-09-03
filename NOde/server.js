@@ -10,7 +10,7 @@ function start() {
     response.end();
   }
 
-  server = http.createServer(onRequest).listen(8888);
+  server = http.createServer(onRequest).listen(8880);
   console.log("Server has started.");
   
 var Db = require('mongodb').Db,
@@ -65,12 +65,12 @@ messageConfig = {
 }
 	
 	function getData(client,reqCollection){
-		new Db('den_test', new Server("127.0.0.1", 27017, {auto_reconnect: false}), {})
+		new Db('den_test_arc', new Server("127.0.0.1", 27017, {auto_reconnect: false}), {})
 			.open(function(err, db) {
 				if(!err) {
 					console.log("We are connected");
 				}
-				db.collection(reqCollection, function(err, dbCollection) {
+				db.collection('friends', function(err, dbCollection) {
 					dbCollection.find().toArray(function(err, dbRes) {
 						 var intCount = dbRes.length;
 						 sendMessage(client, dbRes);
