@@ -24,7 +24,7 @@ socket.on('connection', function(client){
     client.emit('wellcome', "Hey you!");
 
     //client.on('message', function(msg) { console.log("client has sent:"+msg); }) ;
-	client.on('message', function (data) {
+	client.on('serverRequest', function (data) {
 		handleMessage(data,client);
 		//getData(client);
 	});
@@ -56,7 +56,7 @@ socket.on('connection', function(client){
 
 	//WORKER for sending messages to client 
 	function sendMessage(client, data){
-		client.emit('news', data);
+		client.emit('serverResponse', data);
 	}
 
 messageConfig = {

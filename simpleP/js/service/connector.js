@@ -2,11 +2,11 @@
 define([
 	'jquery',
 	'socketio',
-	'service/comunicatorFacade'
-], function ($, io, comunicatorFacade) {
+	'service/comunicatorMediator'
+], function ($, io, communicatorMediator) {
 
 	var socket = io.connect('http://127.0.0.1:8880');
-	var cF = new comunicatorFacade(socket);
+	var cF = new communicatorMediator(socket);
 /*
 	*/
 /*conn.on('wellcome', function (data) {

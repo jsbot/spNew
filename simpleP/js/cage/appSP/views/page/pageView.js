@@ -44,16 +44,20 @@ define([
 				console.log(data);
 			});
 			_this.collection = new PageCollection();
-			conn.getMessage('news',function(data){
+			/*conn.getMessage('news',function(data){
 				console.log(data);
 				_this.addRepro(_this.collection, data);
-			});
-			conn.sendMessage('message','{"id":"0001","collection":"friends"}');
+			});*/
+            _this.collection = new PageCollection();
+            conn.sendMessage('getFriends','{"id":"0001","collection":"friends"}', function(topic,data){
+                console.log(data);
+                _this.addRepro(_this.collection, data);
+            });
 
 /*			conn.on('wellcome', function (data) {
 				console.log(data);
 			});
-			_this.collection = new PageCollection();
+
 			conn.on('news', function (data) {
 				console.log(data);
 				_this.addRepro(_this.collection, data);
