@@ -23,19 +23,16 @@ socket.on('connection', function(client){
     console.log("New client is here!");
     client.emit('wellcome', "Hey you!");
 
-    //client.on('message', function(msg) { console.log("client has sent:"+msg); }) ;
-	client.on('serverRequest', function (data) {
-		handleMessage(data,client);
-		//getData(client);
+
+	client.on('serverRequest', function (messageType,data) {
+		handleMessage(messageType,data,client);
 	});
 }); 
 
 
-	//WORKER for deal with client messages
-	function handleMessage(data,client){
-		//var jsondata = '{"sample": "data", "is": "great", "data": [1, 2, 3, 4]}';
-		//var obj = JSON.parse(jsondata);
-		//console.log(obj.sample);	
+//WORKER for deal with client messages
+	function handleMessage(messageType, data,client){
+		console.log(data);
 		var obj;
 		if(typeof data !== 'object'){
 			console.log("error with an object");
@@ -45,16 +42,17 @@ socket.on('connection', function(client){
 		}
 
 		var eventType = messageConfig[obj.id];
-		
-		//Check if this getting data by collection or other call
-		if(data.hasOwnProperty("collection")){
-				eventType(client, obj.collection);
+
+	//Check if this getting data by collection or other call
+		if(obj.hasOwnProperty("collection")){
+			console.log("PROCESSING: ...  "+obj.collection);
+			eventType(client, obj.collection);
 		}else{
 			eventType(client);
-		}		
+		}
 	}
 
-	//WORKER for sending messages to client 
+//WORKER for sending messages to client
 	function sendMessage(client, data){
 		client.emit('serverResponse', data);
 	}
@@ -65,19 +63,16 @@ messageConfig = {
 }
 	
 	function getData(client,reqCollection){
+
 		new Db('den_test_arc', new Server("127.0.0.1", 27017, {auto_reconnect: false}), {})
 			.open(function(err, db) {
 				if(!err) {
 					console.log("We are connected");
 				}
-				db.collection('friends', function(err, dbCollection) {
+				db.collection(reqCollection, function(err, dbCollection) {
 					dbCollection.find().toArray(function(err, dbRes) {
 						 var intCount = dbRes.length;
 						 sendMessage(client, dbRes);
-						//for (i=0; i<intCount; i++){
-						//console.log("item:");
-						//console.log(docs[i]);
-						//}
 						db.close();
 					});
 				});

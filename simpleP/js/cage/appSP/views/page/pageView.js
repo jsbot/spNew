@@ -43,41 +43,13 @@ define([
 			conn.getMessage('wellcome',function(data){
 				console.log(data);
 			});
-			_this.collection = new PageCollection();
-			/*conn.getMessage('news',function(data){
-				console.log(data);
-				_this.addRepro(_this.collection, data);
-			});*/
+
             _this.collection = new PageCollection();
             conn.sendMessage('getFriends','{"id":"0001","collection":"friends"}', function(topic,data){
-                console.log(data);
                 _this.addRepro(_this.collection, data);
             });
 
-/*			conn.on('wellcome', function (data) {
-				console.log(data);
-			});
 
-			conn.on('news', function (data) {
-				console.log(data);
-				_this.addRepro(_this.collection, data);
-			});
-            */
-			//conn.emit('message', '{"id":"0001","collection":"friends"}');
-
-
-			/*this.collection.add({
-			 id: 1,
-			 title: "html mockup2",
-			 img: "img/1.jpg",
-			 src: "/test.html"
-			 });*/
-			/*this.collection.add({
-			 id: 2,
-			 title: "html mockup3",
-			 img: "img/2.jpg",
-			 src: "asdasdasdas/test.html"
-			 });*/
 		}
 
 

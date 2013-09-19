@@ -28,11 +28,9 @@ define(["service/pupsub"], function (pupsub) {
         ps.publish(messageType,callback);
     })*/
 	communicatorMediator.prototype.sendMessage = function(messageType, data, callback){
-		this.io.emit('serverRequest', data);
+		this.io.emit('serverRequest',messageType, data);
 		//subscribe for event
 		console.log("sendMessageRequest: "+messageType);
-
-
         pubsub.subscribe(messageType,callback);
 	}
 
