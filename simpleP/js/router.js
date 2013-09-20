@@ -1,44 +1,40 @@
 // Filename: router.js
 define([
-    'jquery',
-    'underscore',
-    'backbone',
-    'cage/appSP/views/page/pageView',
-    'cage/appSP/views/friends/friendsView'
-], function($, _, Backbone, PageView, FriendsView){
+	'jquery',
+	'underscore',
+	'backbone',
+	'cage/appSP/views/page/pageView',
+	'cage/registration/views/page/RegistrationView'
+], function ($, _, Backbone, PageView, RegistrationView) {
 
-    var AppRouter = Backbone.Router.extend({
-        routes: {
-            "": "index",
-            "page": "page",
-            "friends": "friendsPage"
-        },
+	var AppRouter = Backbone.Router.extend({
+		routes: {
+			"": "index",
+			"page": "page",
+			"register": "registration"
+		},
 
-        index: function() {
-            alert("page");
-        },
+		index: function () {
+			alert("page");
+		},
 
-        page: function() {
+		page: function () {
+			pv.render();
+		},
+		registration: function () {
+			rv.render();
+		}
+	});
 
-            pv.render();
-           // alert("page");//welcomeViewInstance.render();
-        },
-        friendsPage: function(){
+	initialize = function () {
+		rv = new RegistrationView();
+		pv = new PageView();
+		appRouterInstance = new AppRouter();
 
-            fv.render();
-        }
-    });
+		Backbone.history.start();
+	};
 
-    initialize = function(){
-
-        fv = new FriendsView();
-        pv = new PageView();
-        appRouterInstance = new AppRouter();
-
-        Backbone.history.start();
-    };
-
-    return {
-        initialize: initialize
-    };
+	return {
+		initialize: initialize
+	};
 });

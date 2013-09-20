@@ -16,32 +16,40 @@ define([
 		el: $('#container'),
 		template: Handlebars.compile(pageTemplate),
 		events: {
-			"click .gtreg": "navigateToRegister" // Обработчик клика на кнопке "Проверить"
+			"click .test": "navigateToFriends" // Обработчик клика на кнопке "Проверить"
 		},
-		navigateToRegister: function () {
-			appRouterInstance.navigate("register", true);
+		navigateToFriends: function () {
+			alert("navigate to friends");
+			appRouterInstance.navigate("friends", true);
 		},
 		addRepro: function (collection, reproArr) {
 			for (i = 0; i <= reproArr.length; i++) {
 				collection.add(reproArr[i]);
 			}
-			//this.render();
+			this.render();
 		},
+
 		render: function () {
+			// Using Underscore we can compile our template with data
+
 			var context = this.collection.models;
 			var html = this.template({numbers: context});
 			this.$el.html(html);
+
 		},
 		initialize: function () {
 			var _this = this;
 			var conn = connector;
-			conn.getMessage('wellcome', function (data) {
+			conn.getMessage('wellcome',function(data){
 				console.log(data);
 			});
-			_this.collection = new PageCollection();
-			conn.sendMessage('getFriends', '{"id":"0001","collection":"friends"}', function (topic, data) {
-				_this.addRepro(_this.collection, data);
-			});
+
+            _this.collection = new PageCollection();
+			conn.sendMessage('getFriends','{"id":"0001","collection":"friends"}', function(topic,data){
+                _this.addRepro(_this.collection, data);
+            });
+
+
 		}
 
 

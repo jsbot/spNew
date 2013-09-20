@@ -31,7 +31,7 @@ socket.on('connection', function(client){
 
 
 //WORKER for deal with client messages
-	function handleMessage(messageType, data,client){
+	function handleMessage(messageType,data,client){
 		console.log(data);
 		var obj;
 		if(typeof data !== 'object'){
@@ -46,24 +46,35 @@ socket.on('connection', function(client){
 	//Check if this getting data by collection or other call
 		if(obj.hasOwnProperty("collection")){
 			console.log("PROCESSING: ...  "+obj.collection);
-			eventType(client, obj.collection);
+			eventType(messageType, client, obj.collection);
 		}else{
-			eventType(client);
+			eventType(messageType, client);
 		}
 	}
 
 //WORKER for sending messages to client
-	function sendMessage(client, data){
-		client.emit('serverResponse', data);
+	function sendMessage(messageType,client, data){
+		client.emit('serverResponse',messageType, data);
 	}
+
+/**
+ * Block for handling DB responses
+ * */
+function returnData(messageType, client, reqCollection){
+	console.log("inside return data");
+	getDBData(reqCollection, function(data){
+		sendMessage(messageType,client, data);
+	});
+}
+
 
 messageConfig = {
 	"0001":getData,
-	"0002":"getRepro"
+	"0002":"getRepro",
+	"0101":returnData
 }
 	
-	function getData(client,reqCollection){
-
+	function getData(messageType, client,reqCollection){
 		new Db('den_test_arc', new Server("127.0.0.1", 27017, {auto_reconnect: false}), {})
 			.open(function(err, db) {
 				if(!err) {
@@ -72,7 +83,21 @@ messageConfig = {
 				db.collection(reqCollection, function(err, dbCollection) {
 					dbCollection.find().toArray(function(err, dbRes) {
 						 var intCount = dbRes.length;
-						 sendMessage(client, dbRes);
+						 sendMessage(messageType, client, dbRes);
+						db.close();
+					});
+				});
+			});
+	}
+	function getDBData(reqCollection, callback){
+		new Db('den_test_arc', new Server("127.0.0.1", 27017, {auto_reconnect: false}), {})
+			.open(function(err, db) {
+				if(!err) {
+					console.log("We are connected !!!!!!!!!!!!!!");
+				}
+				db.collection(reqCollection, function(err, dbCollection) {
+					dbCollection.find().toArray(function(err, dbRes) {
+						 callback(dbRes);
 						db.close();
 					});
 				});

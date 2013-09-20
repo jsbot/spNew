@@ -7,12 +7,12 @@ define(["service/pupsub"], function (pupsub) {
 
 		console.log("create facade");
 
-        this.io.on("serverResponse", function (data){     //TODO: handle responce and publish event
+        this.io.on("serverResponse", function (messageType,data){     //TODO: handle responce and publish event
             console.log("=============>");
             console.log("inner responce from server called from mediator object");
             console.log(data);
             console.log("=============>");
-            pubsub.publish("getFriends",data);
+            pubsub.publish(messageType,data);
         });
 
 
