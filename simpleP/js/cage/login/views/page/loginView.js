@@ -18,7 +18,7 @@ define([
 		connect: connector,
 		userLogin: function () {
 			var login = $("#login").val();
-			this.connect.sendMessage('valideteUser', '{"id":"0001","collection":"users"}', function (topic, data) {
+			this.connect.sendMessage('valideteUser', '{"id":"0002","collection":"users", "login":"testman"}', function (topic, data) {
 				console.log(data)
 			});
 		},

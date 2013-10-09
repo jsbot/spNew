@@ -1,6 +1,7 @@
 var http = require("http"),
 io = require("socket.io");
 var JSON2 = require('./');
+var mongoose = require('mongoose');
 //check
 function start() {
   function onRequest(request, response) {
@@ -46,7 +47,7 @@ socket.on('connection', function(client){
 	//Check if this getting data by collection or other call
 		if(obj.hasOwnProperty("collection")){
 			console.log("PROCESSING: ...  "+obj.collection);
-			eventType(messageType, client, obj.collection);
+			eventType(messageType, client, obj);
 		}else{
 			eventType(messageType, client);
 		}
@@ -61,9 +62,9 @@ socket.on('connection', function(client){
 /**
  * Block for handling DB responses
  * */
-function returnData(messageType, client, reqCollection){
+function returnData(messageType, client, obj){
 	console.log("inside return data");
-	getFRTEMP(reqCollection, function (data) {
+	getFRTEMP(obj.collection, function (data) {
 		sendMessage(messageType,client, data);
 	});
 }
@@ -71,7 +72,7 @@ function returnData(messageType, client, reqCollection){
 
 messageConfig = {
 	"0003": getData,
-	"0002": getFRTEMP,
+	"0002": userAuthorization,
 	"0001": returnData
 }
 
@@ -92,7 +93,7 @@ messageConfig = {
 	}
 
 	function getFRTEMP(reqCollection, callback) {
-		var mongoose = require('mongoose');
+
 
 		var db = mongoose.connection;
 
@@ -104,12 +105,7 @@ messageConfig = {
 				src: { type: String },
 				title: { type: String }
 			});
-			var userSchema = new mongoose.Schema({
-				id: Number,
-				login: { type: String },
-				password: { type: String },
-				permission: Number
-			});
+			var userSchema = new mongoose.Schema({});
 
 			var Data = mongoose.model(reqCollection, friendsSchema);
 			Data.find(function (err, resultData) {
@@ -121,21 +117,14 @@ messageConfig = {
 		});
 		mongoose.connect('mongodb://satan:reboot@ds049848.mongolab.com:49848/sameplace');
 	}
-	function getDBData(reqCollection, callback){
-		new Db('den_test_arc', new Server("127.0.0.1", 27017, {auto_reconnect: false}), {})
-			.open(function(err, db) {
-				if(!err) {
-					console.log("We are connected !!!!!!!!!!!!!!");
-				}
-				db.collection(reqCollection, function(err, dbCollection) {
-					dbCollection.find().toArray(function(err, dbRes) {
-						 callback(dbRes);
-						db.close();
-					});
-				});
-			});
-	}
-				
+	function userAuthorization(messageType, client, obj){
+        getFRTEMP(obj.collection, function (data) {
+            console.log("USER DATA");
+            console.log(data.toJSON());
+            sendMessage(messageType,client, obj.login);
+        });
+    }
+
 }
 
 
