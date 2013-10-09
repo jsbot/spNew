@@ -54,6 +54,7 @@ socket.on('connection', function(client){
 
 //WORKER for sending messages to client
 	function sendMessage(messageType,client, data){
+		console.log("SEND WERE CALLED");
 		client.emit('serverResponse',messageType, data);
 	}
 
@@ -62,18 +63,18 @@ socket.on('connection', function(client){
  * */
 function returnData(messageType, client, reqCollection){
 	console.log("inside return data");
-	getDBData(reqCollection, function(data){
+	getFRTEMP(reqCollection, function (data) {
 		sendMessage(messageType,client, data);
 	});
 }
 
 
 messageConfig = {
-	"0001":getData,
-	"0002":"getRepro",
-	"0101":returnData
+	"0003": getData,
+	"0002": getFRTEMP,
+	"0001": returnData
 }
-	
+
 	function getData(messageType, client,reqCollection){
 		new Db('den_test_arc', new Server("127.0.0.1", 27017, {auto_reconnect: false}), {})
 			.open(function(err, db) {
@@ -82,12 +83,42 @@ messageConfig = {
 				}
 				db.collection(reqCollection, function(err, dbCollection) {
 					dbCollection.find().toArray(function(err, dbRes) {
-						 var intCount = dbRes.length;
-						 sendMessage(messageType, client, dbRes);
+						//var intCount = dbRes.length;
+						sendMessage(messageType, client, dbRes);
 						db.close();
 					});
 				});
 			});
+	}
+
+	function getFRTEMP(reqCollection, callback) {
+		var mongoose = require('mongoose');
+
+		var db = mongoose.connection;
+
+		db.on('error', console.error);
+		db.once('open', function () {
+			var friendsSchema = new mongoose.Schema({
+				id: Number,
+				img: { type: String },
+				src: { type: String },
+				title: { type: String }
+			});
+			var userSchema = new mongoose.Schema({
+				id: Number,
+				login: { type: String },
+				password: { type: String },
+				permission: Number
+			});
+
+			var Data = mongoose.model(reqCollection, friendsSchema);
+			Data.find(function (err, resultData) {
+				if (err) return console.error(err);
+				//console.dir(resultData);
+				callback(resultData);
+			});
+		});
+		mongoose.connect('mongodb://satan:reboot@ds049848.mongolab.com:49848/sameplace');
 	}
 	function getDBData(reqCollection, callback){
 		new Db('den_test_arc', new Server("127.0.0.1", 27017, {auto_reconnect: false}), {})

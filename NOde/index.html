@@ -1,31 +1,31 @@
 <!doctype html>
 <html lang="en">
 <head>
-    <title>SimpleP</title>
+	<title>SimpleP</title>
 
 </head>
 <body>
 <script src="socket.io.js"></script>
 <script>
-  socket = io.connect('http://127.0.0.1:8880');
-  socket.on('wellcome', function (data) {
-    console.log(data);
-  });
-  socket.on('news', function (data) {
-    console.log(data);
-  });  
-  function sendMessage(data){
-	socket.emit('message', data);
-  }
-  
-  function friends(){
-	sendMessage({"id":"0001","collection":"friends"});
-	console.log("send Friends reqiest");
-  }  
-  function data(){
-	sendMessage({"id":"0001","collection":"documents"});
-	console.log("send Data request");
-  }
+	socket = io.connect('http://127.0.0.1:8880');
+	socket.on('wellcome', function (data) {
+		console.log(data);
+	});
+	socket.on('serverResponse', function (messageType, data) {
+		console.log(data);
+	});
+	function sendMessage(data) {
+		socket.emit('serverRequest', 'getFriends', data);
+	}
+
+	function friends() {
+		sendMessage({"id": "0001", "collection": "friends"});
+		console.log("send Friends reqiest");
+	}
+	function data() {
+		sendMessage({"id": "0001", "collection": "documents"});
+		console.log("send Data request");
+	}
 </script>
 <a onclick="friends()">Friends</a>
 <a onclick="data()">Data</a>
