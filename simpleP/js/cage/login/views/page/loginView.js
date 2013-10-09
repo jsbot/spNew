@@ -15,10 +15,12 @@ define([
 		events: {
 			"click #submit": "userLogin"
 		},
+		connect: connector,
 		userLogin: function () {
 			var login = $("#login").val();
-			console.log(login);
-
+			this.connect.sendMessage('valideteUser', '{"id":"0001","collection":"users"}', function (topic, data) {
+				console.log(data)
+			});
 		},
 
 		render: function () {
@@ -26,8 +28,7 @@ define([
 			this.$el.html(html);
 		},
 		initialize: function () {
-			var _this = this;
-			var conn = connector;
+
 		}
 
 

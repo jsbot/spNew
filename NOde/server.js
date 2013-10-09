@@ -116,6 +116,7 @@ messageConfig = {
 				if (err) return console.error(err);
 				//console.dir(resultData);
 				callback(resultData);
+				db.close();
 			});
 		});
 		mongoose.connect('mongodb://satan:reboot@ds049848.mongolab.com:49848/sameplace');
