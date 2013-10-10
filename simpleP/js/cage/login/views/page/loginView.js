@@ -18,17 +18,27 @@ define([
 		connect: connector,
 		userLogin: function () {
 			var login = $("#login").val();
-			this.connect.sendMessage('valideteUser', '{"id":"0002","collection":"users", "login":"testman"}', function (topic, data) {
-				console.log(data)
+			var pass = $("#pass").val();
+			console.log(login);
+			this.connect.sendMessage('valideteUser', '{"id":"0002","collection":"users", "login":"' + login + '", "password":"' + pass + '"}', function (topic, data) {
+				if (!data.status) {
+					$('.loginError').html(data.message);
+				} else {
+					appRouterInstance.navigate("page", true);
+					loginStatus = true;
+				}
 			});
 		},
 
 		render: function () {
 			var html = this.template();
 			this.$el.html(html);
+			if (loginStatus) {
+				appRouterInstance.navigate("page", true);
+			}
 		},
 		initialize: function () {
-
+			loginStatus = false;
 		}
 
 
