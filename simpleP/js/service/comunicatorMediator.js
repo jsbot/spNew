@@ -1,9 +1,9 @@
 //facade for providing communication on top of socket
-define(["service/pupsub"], function (pupsub) {
+define(["service/pupsub", "service/messageHelper"], function (pupsub, messageHelper) {
 
 	var communicatorMediator = function (socket){
 		this.io = socket;
-        console.log(pubsub);
+		//console.log(pubsub);
 
 		console.log("create facade");
 
@@ -28,6 +28,8 @@ define(["service/pupsub"], function (pupsub) {
         ps.publish(messageType,callback);
     })*/
 	communicatorMediator.prototype.sendMessage = function(messageType, data, callback){
+		console.log("MESSAGE HELPER:");
+		console.log(messageHelper.createJSON("valideteUser", "login=satan", "password=test"));
 		this.io.emit('serverRequest',messageType, data);
 		//subscribe for event
 		console.log("sendMessageRequest: "+messageType);
