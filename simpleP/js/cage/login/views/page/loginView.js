@@ -19,9 +19,8 @@ define([
 		userLogin: function () {
 			var login = $("#login").val();
 			var pass = $("#pass").val();
-			console.log(login);
 			//TODO: add Helper for create JSON and send it to Server
-			this.connect.sendMessage('valideteUser', '{"id":"0002","collection":"users", "login":"' + login + '", "password":"' + pass + '"}', function (topic, data) {
+			this.connect.sendMessage("valideteUser", "login="+login, "password="+pass, function (topic, data) {
 				if (!data.status) {
 					$('.loginError').html(data.message);
 				} else {

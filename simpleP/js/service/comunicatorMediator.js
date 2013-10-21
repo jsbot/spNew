@@ -27,13 +27,19 @@ define(["service/pupsub", "service/messageHelper"], function (pupsub, messageHel
    /* this.io.on("serverResponce", function(){
         ps.publish(messageType,callback);
     })*/
-	communicatorMediator.prototype.sendMessage = function(messageType, data, callback){
+	communicatorMediator.prototype.sendMessage = function(){
 		console.log("MESSAGE HELPER:");
-		console.log(messageHelper.createJSON("valideteUser", "login=satan", "password=test"));
-		this.io.emit('serverRequest',messageType, data);
+        var resData;
+            var tArr = new Array();
+            for(i=0; i<arguments.length-1; i++){
+                tArr.push(arguments[i]);
+            }
+            resData = tArr;
+		var data = messageHelper.createJSON.apply(this,resData);
+		this.io.emit('serverRequest',arguments[0], data);
 		//subscribe for event
-		console.log("sendMessageRequest: "+messageType);
-        pubsub.subscribe(messageType,callback);
+		console.log("sendMessageRequest: "+arguments[0]);
+        pubsub.subscribe(arguments[0],arguments[arguments.length-1]);
 	}
 
 

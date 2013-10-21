@@ -5,8 +5,8 @@
 	},
 	"valideteUser": {
 		"collection": "users",
-		"login": "",
-		"password": "",
+		"login": "l",
+		"password": "p",
 		"id": "0002"
 	},
 	"registerUser": {

@@ -4,8 +4,6 @@ define([
 	'underscore',
 	'backbone',
 	'cage/appSP/collections/pageCollection',
-	// Using the Require.js text! plugin, we are loaded raw text
-	// which will be used as our views primary template
 	'text!cage/appSP/templates/page/page.html',
 	'handlebars',
 	'service/connector'
@@ -39,7 +37,7 @@ define([
 				console.log(data);
 			});
 			_this.collection = new PageCollection();
-			conn.sendMessage('getFriends', '{"id":"0001","collection":"friends"}', function (topic, data) {
+			conn.sendMessage('getFriends', function (topic, data) {
 				_this.addRepro(_this.collection, data);
 			});
 		}
